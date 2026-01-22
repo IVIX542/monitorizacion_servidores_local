@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instrucciones de Uso - Proceso Creativo</title>
+    <link rel="stylesheet" href="docs.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <h2>📚 Documentación</h2>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="instrucciones_uso.html" class="active">Instrucciones de Uso</a></li>
+            <li><a href="guia_vms.html">Guía de VMs (VirtualBox)</a></li>
+            <li><a href="pasos_tecnicos.html">Registro Técnico (Pasos)</a></li>
+            <li><a href="walkthrough_tecnico.html">Walkthrough Técnico</a></li>
+            <li><a href="comandos_prueba.html">Comandos de Prueba</a></li>
+            <li><a href="herramientas_ia.html">Herramientas IA</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Instrucciones de Uso y Configuración</h1>
+
+        <p>Este documento detalla paso a paso cómo configurar y ejecutar el Dashboard de Control de Servidores.</p>
+
+        <h2>1. Configuración de Máquinas Virtuales (VirtualBox)</h2>
+        <p>Sigue la guía detallada en <a href="guia_vms.html">guia_vms.md</a> para crear las máquinas virtuales.</p>
+
+        <p><strong>Puntos clave:</strong></p>
+        <ul>
+            <li>Nombres de VM: <code>server1</code>, <code>server2</code>, <code>server3</code>.</li>
+            <li>Red: <strong>Adaptador Puente (Bridged)</strong> para que tengan IPs en tu red local.</li>
+            <li>Usuario: <code>usuario</code> (si usas otro, actualiza <code>server.js</code>).</li>
+            <li>SSH: Debe estar instalado (<code>sudo apt install openssh-server</code>).</li>
+        </ul>
+
+        <h3>Configuración de Claves SSH</h3>
+        <p>El dashboard se conecta automáticamente sin contraseña.</p>
+        <ol>
+            <li>Genera claves en Windows (Powershell): <code>ssh-keygen -t rsa</code> (enter a todo).</li>
+            <li>Copia la clave pública a cada VM:</li>
+        </ol>
+        <pre><code>type $env:USERPROFILE\.ssh\id_rsa.pub | ssh usuario@IP_DE_LA_VM "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"</code></pre>
+
+        <h2>2. Configuración del Proyecto</h2>
+
+        <h3>Requisitos</h3>
+        <ul>
+            <li><a href="https://nodejs.org/">Node.js</a> instalado.</li>
+            <li><strong>VirtualBox</strong> instalado y agregado al PATH (generalmente
+                <code>C:\Program Files\Oracle\VirtualBox</code> debe estar en las Variables de Entorno del sistema).
+            </li>
+        </ul>
+
+        <h3>Instalación de Dependencias</h3>
+        <p>Abre una terminal en la carpeta <code>dashboard</code> y ejecuta:</p>
+        <pre><code>npm install</code></pre>
+
+        <h3>Configuración de Servidores</h3>
+        <p>Abre <code>dashboard/server.js</code> y busca la sección de configuración:</p>
+        <pre><code>const servers = [
+    { id: '1', name: 'server1', ip: '192.168.1.101', user: 'usuario', privateKeyPath: 'C:\\Users\\razon\\.ssh\\id_rsa' },
+    ...
+];</code></pre>
+        <ul>
+            <li><strong>IPs</strong>: Actualiza las IPs con las que tienen tus VMs actualmente (usa <code>ip addr</code>
+                en cada VM para verlas).</li>
+            <li><strong>User</strong>: Cambia <code>usuario</code> por tu usuario de Linux.</li>
+            <li><strong>PrivateKeyPath</strong>: Asegúrate de que la ruta a tu clave privada es correcta.</li>
+        </ul>
+
+        <h2>3. Ejecución</h2>
+        <ol>
+            <li>Inicia el servidor Node.js:
+                <pre><code>npm start</code></pre>
+            </li>
+            <li>Deberías ver: <code>Server running at http://localhost:3000</code></li>
+            <li>Abre tu navegador en <a href="http://localhost:3000">http://localhost:3000</a>.</li>
+        </ol>
+
+        <h2>4. Uso del Dashboard</h2>
+        <ul>
+            <li><strong>Estado</strong>: Verás si los servidores están <strong>RUNNING</strong> (verde) o
+                <strong>STOPPED</strong> (rojo).
+            </li>
+            <li><strong>Start/Stop</strong>:
+                <ul>
+                    <li><strong>Start</strong>: Inicia la VM en modo "headless" (sin ventana).</li>
+                    <li><strong>Stop</strong>: Envía una señal ACPI de apagado (como pulsar el botón).</li>
+                </ul>
+            </li>
+            <li><strong>Comandos</strong>: Escribe un comando (ej: <code>uptime</code>, <code>ls -la</code>,
+                <code>ifconfig</code>) y pulsa <strong>Run</strong> para verlo en tiempo real.
+            </li>
+            <li><strong>CPU</strong>: Pulsa <strong>Get CPU Load</strong> para ver el uso actual del procesador.</li>
+        </ul>
+
+        <h2>Solución de Problemas</h2>
+        <ul>
+            <li><strong>Error: VBoxManage not found</strong>: Agrega la carpeta de VirtualBox a tu PATH de Windows.</li>
+            <li><strong>Error: Connection failed</strong>:
+                <ul>
+                    <li>Verifica que la IP es correcta.</li>
+                    <li>Verifica que puedes entrar por SSH manualmente (<code>ssh usuario@IP</code>).</li>
+                    <li>Verifica la ruta de la <code>privateKeyPath</code>.</li>
+                </ul>
+            </li>
+            <li><strong>El servidor no arranca</strong>: Verifica el nombre de la VM en VirtualBox vs
+                <code>server.js</code>.
+            </li>
+        </ul>
+    </main>
+    <script src="docs.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos de Prueba - Proceso Creativo</title>
+    <link rel="stylesheet" href="docs.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <h2>📚 Documentación</h2>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="instrucciones_uso.html">Instrucciones de Uso</a></li>
+            <li><a href="guia_vms.html">Guía de VMs (VirtualBox)</a></li>
+            <li><a href="pasos_tecnicos.html">Registro Técnico (Pasos)</a></li>
+            <li><a href="walkthrough_tecnico.html">Walkthrough Técnico</a></li>
+            <li><a href="comandos_prueba.html" class="active">Comandos de Prueba</a></li>
+            <li><a href="herramientas_ia.html">Herramientas IA</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Comandos de Prueba para el Dashboard</h1>
+
+        <p>Esta lista contiene comandos útiles para ejecutar desde el panel de control y verificar la conectividad de
+            tus servidores.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Comando</th>
+                    <th>Descripción</th>
+                    <th>Respuesta Típica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>hostname</code></td>
+                    <td>Nombre del servidor.</td>
+                    <td><code>server1</code></td>
+                </tr>
+                <tr>
+                    <td><code>whoami</code></td>
+                    <td>Usuario actual.</td>
+                    <td><code>usuario</code></td>
+                </tr>
+                <tr>
+                    <td><code>uptime</code></td>
+                    <td>Tiempo de actividad.</td>
+                    <td><code>14:32 up 2 days...</code></td>
+                </tr>
+                <tr>
+                    <td><code>ls -la</code></td>
+                    <td>Listar archivos.</td>
+                    <td>Lista de ficheros con permisos.</td>
+                </tr>
+                <tr>
+                    <td><code>free -m</code></td>
+                    <td>Uso de RAM (MB).</td>
+                    <td><code>Mem: 2048 512...</code></td>
+                </tr>
+                <tr>
+                    <td><code>cat /etc/os-release</code></td>
+                    <td>Info de distribución.</td>
+                    <td><code>Ubuntu 22.04 LTS...</code></td>
+                </tr>
+                <tr>
+                    <td><code>top -b -n 1 | head -5</code></td>
+                    <td>Snapshot de procesos.</td>
+                    <td>Tabla de procesos CPU/MEM.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Pruebas de Error</h2>
+        <ul>
+            <li><code>comando_invalido</code>: Debería devolver <code>command not found</code>.</li>
+            <li><code>cat /root/archivo_secreto</code>: Debería devolver <code>Permission denied</code> (si no eres
+                root).</li>
+        </ul>
+    </main>
+    <script src="docs.js"></script>
+</body>
+
+</html>

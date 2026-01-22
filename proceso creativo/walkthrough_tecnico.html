@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walkthrough Técnico - Proceso Creativo</title>
+    <link rel="stylesheet" href="docs.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <h2>📚 Documentación</h2>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="instrucciones_uso.html">Instrucciones de Uso</a></li>
+            <li><a href="guia_vms.html">Guía de VMs (VirtualBox)</a></li>
+            <li><a href="pasos_tecnicos.html">Registro Técnico (Pasos)</a></li>
+            <li><a href="walkthrough_tecnico.html" class="active">Walkthrough Técnico</a></li>
+            <li><a href="comandos_prueba.html">Comandos de Prueba</a></li>
+            <li><a href="herramientas_ia.html">Herramientas IA</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>📘 Technical Walkthrough: Dashboard de Control</h1>
+
+        <p>Este documento detalla la arquitectura, tecnologías y APIs utilizadas para construir la aplicación.</p>
+
+        <h2>🏗️ Arquitectura del Sistema</h2>
+        <p>Arquitectura <strong>Cliente-Servidor (Node.js)</strong> con comunicación en tiempo real (Socket.io) y puente
+            SSH a infraestructura virtualizada.</p>
+
+        <pre><code>
+    User[Navegador] <--> [Node/Express Server]
+                                |
+                        [SSH Bridge / VBox CLI]
+                                |
+                          [VMs: Linux/Windows]
+        </code></pre>
+
+        <h2>🛠️ Stack Tecnológico</h2>
+        <h3>Backend (Node.js)</h3>
+        <ul>
+            <li><strong>Express.js</strong>: API REST y servidor estático.</li>
+            <li><strong>Socket.io</strong>: Streaming bidireccional de terminal.</li>
+            <li><strong>Node-SSH</strong>: Cliente SSH programático.</li>
+        </ul>
+
+        <h3>Frontend (Web)</h3>
+        <ul>
+            <li><strong>HTML5/CSS3</strong>: Theming con variables CSS (Matrix, Mr. Robot, Tron).</li>
+            <li><strong>Xterm.js</strong>: Terminal emulator para web.</li>
+            <li><strong>Canvas API</strong>: Animaciones de fondo (Lluvia Matrix, Grid).</li>
+        </ul>
+
+        <h2>🔌 API Reference - REST Endpoints</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Método</th>
+                    <th>Endpoint</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/servers</td>
+                    <td>Lista de servidores y estado (Running/Stopped).</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/api/servers/start</td>
+                    <td>Inicia una VM (VBoxManage startvm).</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/api/servers/stop</td>
+                    <td>Apaga una VM (VBoxManage controlvm).</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/api/stats/cpu</td>
+                    <td>Obtiene CPU load vía SSH.</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/api/stats/os</td>
+                    <td>Obtiene Info SO vía SSH.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>⚡ WebSocket Events</h2>
+        <ul>
+            <li><strong>start_ssh_session</strong>: Inicia conexión SSH backend.</li>
+            <li><strong>term_input</strong>: (Browser -> Node) Keystroke.</li>
+            <li><strong>term_data:{id}</strong>: (Node -> Browser) Salida de terminal cruda.</li>
+        </ul>
+
+        <h2>🎨 Sistema de Temas</h2>
+        <p>Implementado mediante clases en <code>body</code> (<code>.theme-mr-robot</code>, <code>.theme-tron</code>)
+            que redefinen variables CSS de color, y un sistema de JS (<code>animations.js</code>) que renderiza efectos
+            en un Canvas background.</p>
+    </main>
+    <script src="docs.js"></script>
+</body>
+
+</html>

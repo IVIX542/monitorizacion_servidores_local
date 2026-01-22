@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de VMs - Proceso Creativo</title>
+    <link rel="stylesheet" href="docs.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <h2>📚 Documentación</h2>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="instrucciones_uso.html">Instrucciones de Uso</a></li>
+            <li><a href="guia_vms.html" class="active">Guía de VMs (VirtualBox)</a></li>
+            <li><a href="pasos_tecnicos.html">Registro Técnico (Pasos)</a></li>
+            <li><a href="walkthrough_tecnico.html">Walkthrough Técnico</a></li>
+            <li><a href="comandos_prueba.html">Comandos de Prueba</a></li>
+            <li><a href="herramientas_ia.html">Herramientas IA</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Guía de Configuración de Máquinas Virtuales (VMs)</h1>
+
+        <p>Esta guía te ayudará a preparar el entorno necesario para que el <strong>Dashboard de Control de
+                Servidores</strong> funcione correctamente con servidores reales.</p>
+
+        <h2>1. Requisitos Previos</h2>
+        <ul>
+            <li><strong>VirtualBox</strong>: Descarga e instala VirtualBox desde <a
+                    href="https://www.virtualbox.org/">virtualbox.org</a>.</li>
+            <li><strong>Imagen ISO</strong>: Recomendamos <strong>Ubuntu Server</strong> (versión LTS).
+                <ul>
+                    <li><a href="https://ubuntu.com/download/server">Descargar Ubuntu Server</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>2. Creación de las VMs</h2>
+        <p>Necesitaremos crear 3 máquinas virtuales. Sugerimos nombrarlas:</p>
+        <ul>
+            <li><code>server1</code></li>
+            <li><code>server2</code></li>
+            <li><code>server3</code></li>
+        </ul>
+
+        <h3>Pasos para cada VM:</h3>
+        <ol>
+            <li>Abre VirtualBox y haz clic en <strong>"Nueva"</strong>.</li>
+            <li><strong>Nombre</strong>: <code>server1</code> (luego <code>server2</code>, <code>server3</code>).</li>
+            <li><strong>ISO</strong>: Selecciona la imagen de Ubuntu Server.</li>
+            <li><strong>Recursos</strong>:
+                <ul>
+                    <li><strong>RAM</strong>: 1024 MB (o 2048 MB).</li>
+                    <li><strong>CPU</strong>: 1 vCPU.</li>
+                </ul>
+            </li>
+            <li><strong>Disco Duro</strong>: 10-20 GB es suficiente.</li>
+            <li>Termina el asistente y <strong>NO LA INICIES AÚN</strong>.</li>
+        </ol>
+
+        <h2>3. Configuración de Red (Crítico)</h2>
+        <p>Para que tu PC pueda comunicarse con las VMs via SSH:</p>
+        <ol>
+            <li>Selecciona la VM y haz clic en <strong>Configuración</strong> -> <strong>Red</strong>.</li>
+            <li><strong>Adaptador 1</strong>:
+                <ul>
+                    <li>Conectado a: <strong>Adaptador Puente (Bridged Adapter)</strong>.</li>
+                    <li><em>Nota</em>: Esto hará que la VM tenga una IP en tu red local.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>4. Instalación del Sistema Operativo</h2>
+        <ol>
+            <li>Inicia la VM.</li>
+            <li>Sigue los pasos de instalación de Ubuntu.</li>
+            <li><strong>Importante</strong>: Durante la instalación, marca la casilla <strong>"Install OpenSSH
+                    server"</strong>.</li>
+            <li>Crea un usuario (ej: <code>admin</code> o <code>usuario</code>) y contraseña.</li>
+        </ol>
+
+        <h2>5. Configuración de SSH (Sin contraseña)</h2>
+
+        <h3>En tu Windows (Host):</h3>
+        <ol>
+            <li>Abre PowerShell o CMD.</li>
+            <li>Genera claves: <code>ssh-keygen -t rsa -b 4096</code></li>
+            <li>Esto creará <code>id_rsa</code> en <code>C:\Users\TU_USUARIO\.ssh\</code>.</li>
+        </ol>
+
+        <h3>En las VMs (Linux):</h3>
+        <ol>
+            <li>Inicia sesión en la VM y averigua su IP: <code>ip addr</code>.</li>
+            <li>Desde tu Windows (PowerShell), copia la clave:</li>
+        </ol>
+        <pre><code>type $env:USERPROFILE\.ssh\id_rsa.pub | ssh usuario@IP_DE_LA_VM "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"</code></pre>
+        <p><em>(Reemplaza <code>usuario</code> e <code>IP_DE_LA_VM</code> por los datos reales)</em>.</p>
+        <p><strong>Prueba</strong>: Intenta entrar: <code>ssh usuario@IP_DE_LA_VM</code>. Debería entrar sin clave.</p>
+
+        <h2>6. Comprobación Final</h2>
+        <p>Asegúrate de que el comando <code>VBoxManage</code> funciona en tu terminal de Windows:</p>
+        <pre><code>VBoxManage list vms</code></pre>
+        <p>Deberías ver una lista con <code>server1</code>, <code>server2</code>, etc.</p>
+    </main>
+    <script src="docs.js"></script>
+</body>
+
+</html>

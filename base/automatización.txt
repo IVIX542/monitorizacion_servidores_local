@@ -1,0 +1,1 @@
+¿Cómo puedo obtener el porcentaje de uso de CPU de una VM mediante un solo comando de terminal?

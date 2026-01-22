@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Técnico - Proceso Creativo</title>
+    <link rel="stylesheet" href="docs.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <h2>📚 Documentación</h2>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="instrucciones_uso.html">Instrucciones de Uso</a></li>
+            <li><a href="guia_vms.html">Guía de VMs (VirtualBox)</a></li>
+            <li><a href="pasos_tecnicos.html" class="active">Registro Técnico (Pasos)</a></li>
+            <li><a href="walkthrough_tecnico.html">Walkthrough Técnico</a></li>
+            <li><a href="comandos_prueba.html">Comandos de Prueba</a></li>
+            <li><a href="herramientas_ia.html">Herramientas IA</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Registro Técnico de Implementación</h1>
+
+        <p>Este documento detalla el proceso técnico, las decisiones de arquitectura y las soluciones a problemas
+            complejos implementadas durante el desarrollo del dashboard.</p>
+
+        <h2>1. Arquitectura del Sistema</h2>
+        <ul>
+            <li><strong>Backend (Node.js/Express):</strong> Intermediario entre la interfaz web, el SO anfitrión y las
+                VMs.</li>
+            <li><strong>Frontend (HTML/JS/CSS):</strong> Interfaz ligera que realiza polling y conexiones websocket.
+            </li>
+            <li><strong>Virtualización (VirtualBox):</strong> Infraestructura de servidores simulados.</li>
+        </ul>
+
+        <h2>2. Implementación del Backend (`server.js`)</h2>
+
+        <h3>Integración con VirtualBox</h3>
+        <p>Optamos por ejecutar directamente el CLI <code>VBoxManage</code> usando <code>child_process.exec</code>
+            nativo de Node.js.</p>
+        <ul>
+            <li><strong>Estado:</strong> <code>VBoxManage showvminfo "&lt;nombre&gt;" --machinereadable</code></li>
+            <li><strong>Inicio:</strong> <code>VBoxManage startvm "&lt;nombre&gt;" --type headless</code></li>
+            <li><strong>Parada:</strong> <code>controlvm "&lt;nombre&gt;" poweroff</code> (Forzado para respuesta
+                inmediata).</li>
+        </ul>
+
+        <h3>Conectividad SSH</h3>
+        <p>Librería <code>node-ssh</code> para establecer conexiones remotas a las VMs y endpoints REST para ejecutar
+            comandos.</p>
+
+        <h2>3. Desafíos Técnicos y Soluciones (Troubleshooting)</h2>
+
+        <h3>A. Ubicación de `VBoxManage.exe`</h3>
+        <p><strong>Problema:</strong> El comando no estaba en el PATH.</p>
+        <p><strong>Solución:</strong> Búsqueda dinámica en la variable de entorno <code>VBOX_MSI_INSTALL_PATH</code>.
+        </p>
+
+        <h3>B. Formato de Claves SSH</h3>
+        <p><strong>Problema:</strong> <code>node-ssh</code> no soportaba el formato moderno OpenSSH.</p>
+        <p><strong>Solución:</strong> Generar claves en formato "PEM" clásico (`ssh-keygen -m PEM`).</p>
+
+        <h3>C. Lectura de Clave Privada en Node.js</h3>
+        <p><strong>Problema:</strong> Error <code>Cannot parse privateKey</code>.</p>
+        <p><strong>Solución:</strong> Leer el archivo con <code>fs.readFileSync</code> antes de pasarlo a la conexión:
+        </p>
+        <pre><code>// Correcto
+privateKey: fs.readFileSync(server.privateKeyPath, 'utf8')</code></pre>
+
+        <h2>4. Frontend y Experiencia de Usuario</h2>
+        <ul>
+            <li><strong>Estado en Tiempo Real:</strong> Mapeo de estados VBox a clases CSS visuales.</li>
+            <li><strong>Feedback Asíncrono:</strong> Uso de `fetch` para comandos SSH sin recargas.</li>
+        </ul>
+    </main>
+    <script src="docs.js"></script>
+</body>
+
+</html>
